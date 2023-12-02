@@ -2,7 +2,7 @@ import requests
 import streamlit as st
 import av
 import logging
-# import cv2
+import cv2
 logging.basicConfig(level=logging.WARNING)
 st.set_page_config(page_title="Ai Object Detection", page_icon="🤖")
 from PIL import Image
