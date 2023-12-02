@@ -1,11 +1,11 @@
 av==10.0.0
 numpy==1.25.2
-opencv-contrib-python==4.6.0.66
+#opencv-contrib-python==4.6.0.66
 opencv-python==4.6.0.66
-opencv-python-headless==4.8.1.78
+#opencv-python-headless==4.8.1.78
 Pillow
 Requests==2.31.0
-streamlit==1.29.0
+streamlit
 streamlit_webrtc==0.47.1
 supervision==0.16.0
-ultralytics==8.0.208
+ultralytics
