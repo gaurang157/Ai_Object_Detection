@@ -1,8 +1,6 @@
 av==10.0.0
 numpy==1.25.2
-opencv-contrib-python==4.6.0.66
-opencv-python==4.6.0.66
-opencv-python-headless==4.8.1.78
+opencv-python-headless
 Pillow
 Requests==2.31.0
 streamlit==1.29.0
