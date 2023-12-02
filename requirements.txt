@@ -1,8 +1,8 @@
 av
 numpy
-#opencv-contrib-python==4.6.0.66
+opencv-contrib-python
 opencv-python
-#opencv-python-headless==4.8.1.78
+opencv-python-headless
 Pillow
 Requests
 streamlit
