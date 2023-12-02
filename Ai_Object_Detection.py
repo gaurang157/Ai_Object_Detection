@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.WARNING)
 st.set_page_config(page_title="Ai Object Detection", page_icon="🤖")
 from PIL import Image
 from ultralytics import YOLO
-import cv2
+# import cv2
 import numpy as np
 from io import BytesIO
 from streamlit_webrtc import (
