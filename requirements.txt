@@ -3,7 +3,7 @@ numpy==1.25.2
 opencv-python-headless
 Pillow
 Requests==2.31.0
-streamlit==1.29.0
+streamlit==1.28.0
 streamlit_webrtc==0.47.1
 supervision==0.16.0
 ultralytics==8.0.208
