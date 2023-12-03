@@ -89,7 +89,7 @@ zone_annotator = sv.PolygonZoneAnnotator(
 
 
 def main():
-    st.title("Ai Object Detection")
+    st.title("🤖 Ai Object Detection")
     choice = st.radio("Select an option", ("Use webcam", "Cooking 🍳"))
     if choice == "Use webcam":
         # Define the WebRTC client settings
