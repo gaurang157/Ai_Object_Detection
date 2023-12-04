@@ -54,7 +54,7 @@ zone_polygon_m = np.array([[160, 100],
 model = YOLO("yolov8n.pt")
 
 # Initialize the tracker, annotators, and zone
-tracker = sv.ByteTrack()
+# tracker = sv.ByteTrack()
 box_annotator = sv.BoundingBoxAnnotator()
 label_annotator = sv.LabelAnnotator()
 zone = sv.PolygonZone(polygon=zone_polygon_m, frame_resolution_wh=(642, 642))
@@ -120,21 +120,21 @@ def main():
                     results1 = results
         
                 detections = sv.Detections.from_ultralytics(results1)
-                detections = tracker.update_with_detections(detections)
                 detections = detections[detections.confidence > 0.30]
-        
+                
                 labels = [
-                    f"#{tracker_id} {results1.names[class_id]}"
-                    for class_id, tracker_id in zip(detections.class_id, detections.tracker_id)
+                    f"{results1.names[class_id]}"
+                    for class_id in detections.class_id
                 ]
-        
+                
                 # Convert av.VideoFrame to NumPy array
                 frame_array = frame.to_ndarray(format="bgr24").copy()
-        
+                
                 annotated_frame1 = box_annotator.annotate(frame_array, detections=detections)
                 annotated_frame1 = label_annotator.annotate(annotated_frame1, detections=detections, labels=labels)
                 zone.trigger(detections=detections)
                 frame1 = zone_annotator.annotate(scene=annotated_frame1)
+
                 # Display the count on the screen
                 st.text(f"Objects in Zone: {zone.current_count}")
                 # Convert the frame back to av.VideoFrame
