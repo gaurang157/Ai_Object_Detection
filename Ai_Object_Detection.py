@@ -51,7 +51,7 @@ zone_polygon_m = np.array([[160, 100],
 
 
 # Initialize the YOLOv8 model
-st.cache_resource
+st.cache_resource(deprecation_warning = 'None')
 def load_model():
     model = YOLO("yolov8n.pt")
     return model
