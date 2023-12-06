@@ -50,9 +50,13 @@ zone_polygon_m = np.array([[160, 100],
 
 
 
-# Initialize the YOLOv5 model
-model = YOLO("yolov8n.pt")
-
+# Initialize the YOLOv8 model
+st.cache_resource
+def load_model():
+    model = YOLO("yolov8n.pt")
+    return model
+# model = YOLO("yolov8n.pt")
+model = load_model()
 # Initialize the tracker, annotators, and zone
 # tracker = sv.ByteTrack()
 box_annotator = sv.BoundingBoxAnnotator()
@@ -111,6 +115,7 @@ def main():
         
                 # Run inference on 'bus.jpg' with arguments
                 results = model.predict(img)
+                # model = load_model(model).predict(img)
         
                 # Ensure results is a valid object with necessary attributes
                 # You might need to adjust this part based on the YOLO model you are using
