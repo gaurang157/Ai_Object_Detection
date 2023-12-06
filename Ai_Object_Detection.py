@@ -51,12 +51,14 @@ zone_polygon_m = np.array([[160, 100],
 
 
 # Initialize the YOLOv8 model
-st.cache_resource
+@st.cache_resource
 def load_model():
     model = YOLO("yolov8n.pt")
     return model
-# model = YOLO("yolov8n.pt")
+
+# Load the model using the cached function
 model = load_model()
+
 # Initialize the tracker, annotators, and zone
 # tracker = sv.ByteTrack()
 box_annotator = sv.BoundingBoxAnnotator()
