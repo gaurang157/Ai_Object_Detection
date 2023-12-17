@@ -129,7 +129,8 @@ def main():
                 # st.text(f"Objects in Zone: {zone.current_count}")
                 # Inside the recv method of ObjectDetector
                 # Display the count on the frame using cv2.putText
-                count_text = f"Objects in Zone: {zone.current_count}"
+                # count_text = f"Objects in Zone: {zone.current_count}"
+                count_text = "ai-object-detection.streamlit.app"
                 cv2.putText(frame1, count_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
                 # Convert the frame back to av.VideoFrame
