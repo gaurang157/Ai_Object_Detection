@@ -206,7 +206,7 @@ def main():
             # Check the shape of cv2_img:
             # Should output shape: (height, width, channels)
             # st.write(annotated_frame.shape)
-    elif choice == "Multiple Images Upload - 🖼️🖼️🖼️":
+    elif choice == "Multiple Images Upload -🖼️🖼️🖼️":
         uploaded_files = st.file_uploader("Choose a images", type=['png', 'jpg'], accept_multiple_files=True)
         for uploaded_file in uploaded_files:
             bytes_data = uploaded_file.read()
