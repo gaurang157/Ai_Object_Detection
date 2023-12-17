@@ -100,7 +100,7 @@ def main():
         
                 # Run inference on 'bus.jpg' with arguments
                 results = model.predict(img)
-                print(f"RESULTS===>>__{results}")
+                # print(f"RESULTS===>>__{results}")
                 # Ensure results is a valid object with necessary attributes
                 # You might need to adjust this part based on the YOLO model you are using
                 if isinstance(results, list):
@@ -110,7 +110,7 @@ def main():
         
                 detections = sv.Detections.from_ultralytics(results1)
                 detections = detections[detections.confidence > 0.90]
-                print(f"DETECTIONS--->_{detections}")
+                # print(f"DETECTIONS--->_{detections}")
 
                 labels = [
                     f"{results1.names[class_id]}"
@@ -164,7 +164,7 @@ def main():
             # Check the type of cv2_img:
             # Should output: <class 'numpy.ndarray'>
             results = model.predict(cv2_img)
-            print(f"RESULTS===>>__{results}")
+            # print(f"RESULTS===>>__{results}")
             # Ensure results is a valid object with necessary attributes
             # You might need to adjust this part based on the YOLO model you are using
             if isinstance(results, list):
@@ -174,7 +174,7 @@ def main():
     
             detections = sv.Detections.from_ultralytics(results1)
             detections = detections[detections.confidence > 0.20]
-            print(f"DETECTIONS--->_{detections}")
+            # print(f"DETECTIONS--->_{detections}")
 
             labels = [
                 f"{results1.names[class_id]}"
@@ -218,7 +218,7 @@ def main():
             # Check the type of cv2_img:
             # Should output: <class 'numpy.ndarray'>
             results = model.predict(cv2_img)
-            print(f"RESULTS===>>__{results}")
+            # print(f"RESULTS===>>__{results}")
             # Ensure results is a valid object with necessary attributes
             # You might need to adjust this part based on the YOLO model you are using
             if isinstance(results, list):
@@ -228,7 +228,7 @@ def main():
     
             detections = sv.Detections.from_ultralytics(results1)
             detections = detections[detections.confidence > 0.10]
-            print(f"DETECTIONS--->_{detections}")
+            # print(f"DETECTIONS--->_{detections}")
 
             labels = [
                 f"{results1.names[class_id]}"
@@ -240,7 +240,7 @@ def main():
 
             annotated_frame1 = box_annotator.annotate(cv2_img, detections=detections)
             annotated_frame1 = label_annotator.annotate(annotated_frame1, detections=detections, labels=labels)
-            print(f"-=-=->_{annotated_frame1}")
+            # print(f"-=-=->_{annotated_frame1}")
             g1 = 1
             # Display the count on the screen
             # st.text(f"Objects in Zone: {zone.current_count}")
