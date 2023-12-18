@@ -55,10 +55,10 @@ zone_annotator = sv.PolygonZoneAnnotator(
 
 
 def main():
-    st.title("Ai Object Detection")
+    st.title("🤖 Ai Object Detection")
 
-    choice = st.radio("Select an option", ("Live Webcam Predict", "Capture Image And Predict",":rainbow[Multiple Images Upload -]🖼️🖼️🖼️"),
-                            captions = ["Live Count in Zone.", "Click and Detect. :orange[(Recommended)]", "Upload & Process Multiple Images. :orange[(Recommended)]"])
+    choice = st.radio("Select an option", ("Live Webcam Predict", "Capture Image And Predict",":rainbow[Multiple Images Upload -]🖼️🖼️🖼️", "Upload Video"),
+                            captions = ["Live Count in Zone.", "Click and Detect. :orange[(Recommended)]", "Upload & Process Multiple Images. :orange[(Recommended)]", "Upload Video & Predict"])
     if choice == "Live Webcam Predict":
         # Define the WebRTC client settings
         client_settings = ClientSettings(
@@ -112,9 +112,6 @@ def main():
                 # Convert the frame back to av.VideoFrame
                 annotated_frame = av.VideoFrame.from_ndarray(frame1, format="bgr24")
                 return annotated_frame
-
-
-            
 
         # Start the WebRTC streamer
         webrtc_streamer(
@@ -227,6 +224,38 @@ def main():
             st.write(':orange[ Info : ⤵️ ]')
             st.json(labels1)
             st.subheader("",divider='rainbow')
+    elif choice == "Upload Video":
+        st.title("🏗️Work in Progress📽️🎞️")
+        '''# import tempfile
+        # clip = st.file_uploader("Choose a video file", type=['mp4'])
+
+        # if clip:
+        #             # Read the content of the video file
+        #     video_content = clip.read()
+        #     # Convert the video content to a bytes buffer
+        #     video_buffer = BytesIO(video_content)
+        #     st.video(video_buffer)
+        #     with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as temp_file:
+        #         temp_filename = temp_file.name
+        #         temp_file.write(clip.read())
+
+                
+
+        #         results = model(temp_filename,show = False, stream=False, save = False)
+        #         # # Read the content of the video file
+        #         # # video_content1 = results.read()
+        #         # # Convert the video content to a bytes buffer
+        #         # video_buffer1 = BytesIO(results)
+        #         # st.video(video_buffer1)
+
+        #     # Display the processed video
+        #     # st.video(output_path)            
+        #     # st.video(results)
+            
+
+        #     st.success("Video processing completed.")'''
+
+
     st.subheader("",divider='rainbow')
     st.write(':orange[ Classes : ⤵️ ]')
     cls_name = model.names
