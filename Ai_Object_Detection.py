@@ -28,17 +28,17 @@ zone_polygon_m = np.array([[160, 100],
                          [160, 380], 
                          [481, 380], 
                          [481, 100]], dtype=np.int32)
-# Calculate the center of the polygon
-center = np.mean(zone_polygon_m, axis=0)
+# # Calculate the center of the polygon
+# center = np.mean(zone_polygon_m, axis=0)
 
-# Compute the vector from the center to each corner
-vectors = zone_polygon_m - center
+# # Compute the vector from the center to each corner
+# vectors = zone_polygon_m - center
 
-# Scale each vector by 20%
-expanded_vectors = vectors * 1.2
+# # Scale each vector by 20%
+# expanded_vectors = vectors * 1.2
 
-# Added the expanded vectors to the center to get the new corners
-zone_polygon_m = (expanded_vectors + center).astype(np.int32)
+# # Added the expanded vectors to the center to get the new corners
+# zone_polygon_m = (expanded_vectors + center).astype(np.int32)
 
 
 # Initialize the YOLOv8 model
