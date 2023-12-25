@@ -28,10 +28,20 @@ zone_polygon_m = np.array([[160, 100],
                          [160, 380], 
                          [481, 380], 
                          [481, 100]], dtype=np.int32)
+# Calculate the center of the polygon
+center = np.mean(zone_polygon_m, axis=0)
+
+# Compute the vector from the center to each corner
+vectors = zone_polygon_m - center
+
+# Scale each vector by 20%
+expanded_vectors = vectors * 1.2
+
+# Added the expanded vectors to the center to get the new corners
+zone_polygon_m = (expanded_vectors + center).astype(np.int32)
 
 
-
-# Initialize the YOLOv5 model
+# Initialize the YOLOv8 model
 # model = YOLO("best (3).pt")
 @st.cache_resource
 def load_yolo_model():
@@ -40,7 +50,7 @@ def load_yolo_model():
 # Load the YOLO model (this will be cached)
 model = load_yolo_model()
 
-# Initialize the tracker, annotators, and zone
+# Initialize the tracker, annotators and zone
 tracker = sv.ByteTrack()
 box_annotator = sv.BoundingBoxAnnotator()
 label_annotator = sv.LabelAnnotator()
@@ -76,15 +86,18 @@ def draw_annotations(frame, boxes, masks, names):
 
     return frame
 
-
+# Define the initial confidence threshold
 
 
 def main():
     st.title("🤖 Ai Object Detection")
 
     choice = st.radio("Select an option", ("Live Webcam Predict", "Capture Image And Predict",":rainbow[Multiple Images Upload -]🖼️🖼️🖼️", "Upload Video"),
-                            captions = ["Live Count in Zone.", "Click and Detect. :orange[(Recommended)]", "Upload & Process Multiple Images. :orange[(Recommended)]", "Upload Video & Predict"])
+                            captions = ["Live Count in Zone. :red[(Slow)]🐌", "Click and Detect. :orange[(Recommended)] :green[(Super Fast)]⚡⚡", "Upload & Process Multiple Images. :orange[(Recommended)] :green[(Fast)]⚡", "Upload Video & Predict 🏗️:orange[(Work in Progress)]📽️🎞️"], index = 1)
+    conf = st.slider("Score threshold", 0.0, 1.0, 0.3, 0.05)
     if choice == "Live Webcam Predict":
+        # conf = st.slider("Score threshold", 0.0, 1.0, 0.5, 0.05)
+
         # Define the WebRTC client settings
         client_settings = ClientSettings(
             rtc_configuration={
@@ -98,21 +111,21 @@ def main():
 
         # Define the WebRTC video transformer
         class ObjectDetector(VideoTransformerBase):
+
             def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
                 # Convert the frame to an image
                 img = Image.fromarray(frame.to_ndarray())
         
-                # Run inference on 'bus.jpg' with arguments
                 results = model.predict(img)
-                # Ensure results is a valid object with necessary attributes
-                # You might need to adjust this part based on the YOLO model you are using
+
                 if isinstance(results, list):
-                    results1 = results[0]  # Assuming the first element of the list contains the results
+                    results1 = results[0]  
                 else:
                     results1 = results
-        
+                
                 detections = sv.Detections.from_ultralytics(results1)
-                detections = detections[detections.confidence > 0.25]
+
+                detections = detections[detections.confidence > conf]
 
                 labels = [
                     f"{results1.names[class_id]}"
@@ -127,12 +140,8 @@ def main():
                 zone.trigger(detections=detections)
                 frame1 = zone_annotator.annotate(scene=annotated_frame1)
 
-                # Display the count on the screen
-                # st.text(f"Objects in Zone: {zone.current_count}")
-                # Inside the recv method of ObjectDetector
-                # Display the count on the frame using cv2.putText
                 count_text = f"Objects in Zone: {zone.current_count}"
-                cv2.putText(frame1, count_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+                cv2.putText(frame1, count_text, (10, 30), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
 
                 # Convert the frame back to av.VideoFrame
                 annotated_frame = av.VideoFrame.from_ndarray(frame1, format="bgr24")
@@ -159,18 +168,15 @@ def main():
             bytes_data = img_file_buffer.getvalue()
             cv2_img = cv2.imdecode(np.frombuffer(bytes_data, np.uint8), cv2.IMREAD_COLOR)
 
-            # Check the type of cv2_img:
-            # Should output: <class 'numpy.ndarray'>
             results = model.predict(cv2_img)
-            # Ensure results is a valid object with necessary attributes
-            # You might need to adjust this part based on the YOLO model you are using
+
             if isinstance(results, list):
-                results1 = results[0]  # Assuming the first element of the list contains the results
+                results1 = results[0]  
             else:
                 results1 = results
     
             detections = sv.Detections.from_ultralytics(results1)
-            detections = detections[detections.confidence > 0.25]
+            detections = detections[detections.confidence > conf]
             labels = [
                 f"#{index + 1}: {results1.names[class_id]}"
                 for index, class_id in enumerate(detections.class_id)
@@ -180,17 +186,13 @@ def main():
                         f"#{index + 1}: {results1.names[class_id]} (Accuracy: {detections.confidence[index]:.2f})"
                         for index, class_id in enumerate(detections.class_id)
                     ]
-            # Convert av.VideoFrame to NumPy array
-            # frame_array = frame.to_ndarray(format="bgr24").copy()
+
             annotated_frame1 = box_annotator.annotate(cv2_img, detections=detections)
             annotated_frame1 = label_annotator.annotate(annotated_frame1, detections=detections, labels=labels)
             # Display the count on the screen
-            # st.text(f"Objects in Zone: {zone.current_count}")
-            # Inside the recv method of ObjectDetector
-            # Display the count on the frame using cv2.putText
             # count_text = f"Objects in Zone: {zone.current_count}"     # IMP
             count_text = f"Objects in Frame: {len(detections)}" 
-            cv2.putText(annotated_frame1, count_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+            cv2.putText(annotated_frame1, count_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2, cv2.LINE_AA)
             # Convert the frame back to av.VideoFrame
             annotated_frame = av.VideoFrame.from_ndarray(annotated_frame1, format="bgr24")
             st.image(annotated_frame.to_ndarray(), channels="BGR")
@@ -198,9 +200,7 @@ def main():
             st.write(':orange[ Info : ⤵️ ]')
             st.json(labels1)
             st.subheader("",divider='rainbow')
-            # Check the shape of cv2_img:
-            # Should output shape: (height, width, channels)
-            # st.write(annotated_frame.shape)
+
     elif choice == ":rainbow[Multiple Images Upload -]🖼️🖼️🖼️":
         uploaded_files = st.file_uploader("Choose a images", type=['png', 'jpg'], accept_multiple_files=True)
         for uploaded_file in uploaded_files:
@@ -208,18 +208,16 @@ def main():
             st.write("filename:", uploaded_file.name)
             bytes_data = uploaded_file.getvalue()
             cv2_img = cv2.imdecode(np.frombuffer(bytes_data, np.uint8), cv2.IMREAD_COLOR)
-            # Check the type of cv2_img:
-            # Should output: <class 'numpy.ndarray'>
+
             results = model.predict(cv2_img)
-            # Ensure results is a valid object with necessary attributes
-            # You might need to adjust this part based on the YOLO model you are using
+
             if isinstance(results, list):
-                results1 = results[0]  # Assuming the first element of the list contains the results
+                results1 = results[0]  
             else:
                 results1 = results
     
             detections = sv.Detections.from_ultralytics(results1)
-            detections = detections[detections.confidence > 0.25]
+            detections = detections[detections.confidence > conf]
             labels = [
                 f"#{index + 1}: {results1.names[class_id]}"
                 for index, class_id in enumerate(detections.class_id)
@@ -230,22 +228,17 @@ def main():
                         for index, class_id in enumerate(detections.class_id)
                     ]
 
-            # Convert av.VideoFrame to NumPy array
-            # frame_array = frame.to_ndarray(format="bgr24").copy()
             annotated_frame1 = box_annotator.annotate(cv2_img, detections=detections)
             annotated_frame1 = label_annotator.annotate(annotated_frame1, detections=detections, labels=labels)
             # Display the count on the screen
-            # st.text(f"Objects in Zone: {zone.current_count}")
-            # Inside the recv method of ObjectDetector
-            # Display the count on the frame using cv2.putText
-            # count_text = f"Objects in Zone: {zone.current_count}"     # IMP
+            # count_text = f"Objects in Zone: {zone.current_count}"    
             count_text = f"Objects in Frame: {len(detections)}" 
             cv2.putText(annotated_frame1, count_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
             # Convert the frame back to av.VideoFrame
             annotated_frame = av.VideoFrame.from_ndarray(annotated_frame1, format="bgr24")
             # Display the annotated frame using st.image
             st.image(annotated_frame.to_ndarray(), channels="BGR")
-            # Assuming results is an instance of ultralytics.engine.results.Results
+
             st.write(':orange[ Info : ⤵️ ]')
             st.json(labels1)
             st.subheader("",divider='rainbow')
@@ -327,6 +320,21 @@ def main():
             # st.success("Video processing completed.")'''
 
 
+
+                # # Read the content of the video file
+                # # video_content1 = results.read()
+                # # Convert the video content to a bytes buffer
+                # video_buffer1 = BytesIO(results)
+                # st.video(video_buffer1)
+
+            # Display the processed video
+            # st.video(output_path)            
+            # st.video(results)
+            
+
+            # st.success("Video processing completed.")
+
+    
     st.subheader("",divider='rainbow')
     st.write(':orange[ Classes : ⤵️ ]')
     cls_name = model.names
