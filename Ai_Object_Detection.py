@@ -202,7 +202,7 @@ def main():
             st.subheader("",divider='rainbow')
 
     elif choice == ":rainbow[Multiple Images Upload -]🖼️🖼️🖼️":
-        uploaded_files = st.file_uploader("Choose a images", type=['png', 'jpg'], accept_multiple_files=True)
+        uploaded_files = st.file_uploader("Choose a images", type=['png', 'jpg', 'webp', 'bmp'], accept_multiple_files=True)
         for uploaded_file in uploaded_files:
             bytes_data = uploaded_file.read()
             st.write("filename:", uploaded_file.name)
