@@ -91,8 +91,9 @@ def draw_annotations(frame, boxes, masks, names):
 
 def main():
     st.title("🤖 Ai Object Detection")
-
-    choice = st.radio("Select an option", ("Live Webcam Predict", "Capture Image And Predict",":rainbow[Multiple Images Upload -]🖼️🖼️🖼️", "Upload Video"),
+    st.subheader("YOLOv8 & Streamlit WebRTC Integration :)")
+    st.sidebar.title("Select an option ⤵️")
+    choice = st.sidebar.radio("", ("Live Webcam Predict", "Capture Image And Predict",":rainbow[Multiple Images Upload -]🖼️🖼️🖼️", "Upload Video"),
                             captions = ["Live Count in Zone. :red[(Slow)]🐌", "Click and Detect. :orange[(Recommended)] :green[(Super Fast)]⚡⚡", "Upload & Process Multiple Images. :orange[(Recommended)] :green[(Fast)]⚡", "Upload Video & Predict 🏗️:orange[(Work in Progress)]📽️🎞️"], index = 1)
     conf = st.slider("Score threshold", 0.0, 1.0, 0.3, 0.05)
     if choice == "Live Webcam Predict":
@@ -141,7 +142,7 @@ def main():
                 frame1 = zone_annotator.annotate(scene=annotated_frame1)
 
                 count_text = f"Objects in Zone: {zone.current_count}"
-                cv2.putText(frame1, count_text, (10, 30), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+                cv2.putText(frame1, count_text, (10, 30), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 1, cv2.LINE_AA)
 
                 # Convert the frame back to av.VideoFrame
                 annotated_frame = av.VideoFrame.from_ndarray(frame1, format="bgr24")
