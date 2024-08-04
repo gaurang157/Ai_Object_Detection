@@ -101,9 +101,9 @@ def main():
 
         # Define the WebRTC client settings
         client_settings = ClientSettings(
-            rtc_configuration={
-                "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
-            },
+            # rtc_configuration={
+            #     "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+            # },
             media_stream_constraints={
                 "video": True,
                 "audio": False,
@@ -152,9 +152,9 @@ def main():
         webrtc_streamer(
             key="object-detection",
             mode=WebRtcMode.SENDRECV,
-            rtc_configuration={
-                "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
-            },
+            # rtc_configuration={
+            #     "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+            # },
             media_stream_constraints={
                 "video": True,
                 "audio": False,
