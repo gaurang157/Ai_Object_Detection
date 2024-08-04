@@ -1,12 +1,12 @@
 import requests
 import streamlit as st
 import av
-import logging
+# import logging
 import os
 import tempfile
 # Set the environment variable
-os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-logging.basicConfig(level=logging.WARNING)
+# os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+# logging.basicConfig(level=logging.WARNING)
 st.set_page_config(page_title="Ai Object Detection", page_icon="🤖")
 from PIL import Image
 from ultralytics import YOLO
@@ -26,9 +26,9 @@ import sys
 import time
 # Define the zone polygon
 zone_polygon_m = np.array([[160, 100], 
-						 [160, 380], 
-						 [481, 380], 
-						 [481, 100]], dtype=np.int32)
+			 [160, 380], 
+			 [481, 380], 
+			 [481, 100]], dtype=np.int32)
 # # Calculate the center of the polygon
 # center = np.mean(zone_polygon_m, axis=0)
 
@@ -40,9 +40,9 @@ zone_polygon_m = np.array([[160, 100],
 
 # # Added the expanded vectors to the center to get the new corners
 # zone_polygon_m = (expanded_vectors + center).astype(np.int32)
-@st.cache_resource
+# @st.cache_resource
 def load_yolo_model():
-    return YOLO("yolov8n")
+    return YOLO("yolov8n.pt")
 
 # Load the YOLO model (this will be cached)
 model = load_yolo_model()
